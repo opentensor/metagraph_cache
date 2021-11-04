@@ -31,7 +31,7 @@ if __name__ == '__main__':
     print ('Create server.')
     metagraph_servicer = MetagraphServicer( graph )
     metagraph_pb2_grpc.add_MetagraphServerServicer_to_server( metagraph_servicer, metagraph_server )
-    metagraph_server.add_insecure_port( '127.0.0.1:7869' )
+    metagraph_server.add_insecure_port( '[::]:7869' )
     metagraph_server.start()
 
     print ('Start loop.')
