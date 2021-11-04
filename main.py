@@ -10,8 +10,8 @@ import metagraph_pb2_grpc
 
 class MetagraphServicer ( metagraph_pb2_grpc.MetagraphServer ):
     def __init__(self):
-        graph = bittensor.metagraph()
-        graph.load()
+        graph = bittensor.metagraph( network = 'akatsuki')
+        # graph.load()
         self.bytes = pickle.dumps( graph.state_dict() )
 
     def Get( self, request: metagraph_pb2.Block, context: grpc.ServicerContext  ) -> metagraph_pb2.Metagraph:
