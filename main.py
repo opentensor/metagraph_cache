@@ -27,7 +27,9 @@ if __name__ == '__main__':
     metagraph_server.add_insecure_port( '127.0.0.1:7869' )
     metagraph_server.start()
 
+    print ('starting loop:')
     while True:
+        print ('heartbeat.')
         time.sleep(1)
 
     # # Connections.
