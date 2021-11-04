@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+service MetagraphServer {
+	rpc Get (Block) returns (Metagraph) {}	
+}
+
+message Block {}	
+
+message Metagraph {
+	bytes bytes = 1;
+}	
