@@ -4,6 +4,7 @@ import pickle
 from concurrent import futures
 
 import grpc
+import time
 import metagraph_pb2
 import metagraph_pb2_grpc
 
@@ -26,14 +27,17 @@ if __name__ == '__main__':
     metagraph_server.add_insecure_port( '127.0.0.1:7869' )
     metagraph_server.start()
 
-    # Connections.
-    channel = grpc.insecure_channel( '127.0.0.1:7869' )
-    stub = metagraph_pb2_grpc.MetagraphServerStub( channel )
-    request = metagraph_pb2.Block ()
-    graph = bittensor.metagraph()
-    state = pickle.loads(stub.Get( request = request ).bytes)
-    graph.load_from_state_dict( state )
-    print( graph )
+    while True:
+        time.sleep(1)
+
+    # # Connections.
+    # channel = grpc.insecure_channel( '127.0.0.1:7869' )
+    # stub = metagraph_pb2_grpc.MetagraphServerStub( channel )
+    # request = metagraph_pb2.Block ()
+    # graph = bittensor.metagraph()
+    # state = pickle.loads(stub.Get( request = request ).bytes)
+    # graph.load_from_state_dict( state )
+    # print( graph )
 
 
 
