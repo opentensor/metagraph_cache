@@ -9,9 +9,10 @@ import metagraph_pb2
 import metagraph_pb2_grpc
 
 class MetagraphServicer ( metagraph_pb2_grpc.MetagraphServer ):
-    def __init__(self):
-        graph = bittensor.metagraph( network = 'akatsuki')
-        # graph.load()
+    def __init__(self, graph):
+        self.bytes = pickle.dumps( graph.state_dict() )
+
+    def set_graph( self, graph ):
         self.bytes = pickle.dumps( graph.state_dict() )
 
     def Get( self, request: metagraph_pb2.Block, context: grpc.ServicerContext  ) -> metagraph_pb2.Metagraph:
@@ -22,15 +23,22 @@ if __name__ == '__main__':
     # Create server.
     thread_pool = futures.ThreadPoolExecutor( max_workers = 10 )
     metagraph_server = grpc.server( thread_pool )
-    metagraph_servicer = MetagraphServicer()
+
+    print ('starting loop:')
+    graph = bittensor.metagraph()
+    graph.sync()
+
+    print ('Create server.')
+    metagraph_servicer = MetagraphServicer( graph )
     metagraph_pb2_grpc.add_MetagraphServerServicer_to_server( metagraph_servicer, metagraph_server )
     metagraph_server.add_insecure_port( '127.0.0.1:7869' )
     metagraph_server.start()
 
-    print ('starting loop:')
+    print ('Start loop.')
     while True:
-        print ('heartbeat.')
-        time.sleep(1)
+        print ('re sync.')
+        graph.sync()
+        metagraph_servicer.set_graph( graph )
 
     # # Connections.
     # channel = grpc.insecure_channel( '127.0.0.1:7869' )
